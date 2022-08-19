@@ -1,0 +1,21 @@
+{
+  "name": "semantic_commit_formatter",
+  "version": "1.0.0",
+  "description": "Web app to help a dev team have a common commit standard",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -w",
+    "dev":"nodemon build/index.js",
+    "start":"node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ahadu",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.7.6",
+    "fastify": "^4.5.2",
+    "nodemon": "^2.0.19",
+    "tsc": "^2.0.4",
+    "typescript": "^4.7.4"
+  }
+}
