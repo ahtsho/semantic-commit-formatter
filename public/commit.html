@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>SEMITTER (the SEMantic gIt commit formaTTER)</title>
+    <style>
+      body {
+        margin: 3%;
+      }
+      .supercontainer {
+        max-width: 1000px;
+        margin: auto;
+      }
+      .container {
+        border: solid 1px lightgray;
+        min-height: 50px;
+        padding: 15px;
+      }
+      .form-check-input {
+        width:2.5em;
+        height: 2.5em;
+        margin-top: 0.3em;
+        margin-left: 28%;
+      }
+      .footer-descr {
+        width: 50% !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="supercontainer">
+      <div class="container headers">
+        <h1>SEMITTER</h1>
+        <h3><em>the SEMantic gIt-commit formaTTER</em></h3>
+      </div>
+      <div class="container fw-lighter">
+        <p>${user}:<em>"WHAT? You mean I can insert my git commit info here 
+           and <b>SEMITTER</b> will give it back to <b>ctl-c + ctl-v </b> on my git repo?"<br></em></p> 
+        <p> >dev: <em>"Yep! <b>Conventional commits </b>are a low hanging fruit now! No more excuses, OK?"</em></p>
+        <p>${user}: <em>"Word!"</em></p>
+      </div>
+      <div class="container form">
+        <form id="cmd-form">
+          <div class="row">
+            <div class="col">
+              <label for="cmt-type" class="form-label">Choose type (*)</label>
+              <select id="cmt-type" class="form-select" aria-label="Type">
+                <option value="fix">Bug Fix</option>
+                <option value="feat">Feture</option>
+                <option value="docs">Documentation</option>
+                <option value="style">Style</option>
+                <option value="refactor">Refactor</option>
+                <option value="test">Test</option>
+                <option value="chore">Chore</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="cmt-scope" class="form-label"> Single word scope</label>
+              <input type="text" class="form-control" id="cmt-scope" aria-describedby="code-base-section">
+            </div>
+            <div class="col">
+              <label class="form-check-label" for="breaking_change_danger">Breaking commit?</label>
+              <input type="checkbox" class="form-check-input" id="breaking_change_danger">
+            </div>
+            :
+            <div class="col-6">
+              <label for="cmt-description" class="form-label">Short description of the commit (*) </label>
+              <input type="text" class="form-control" id="cmt-description" aria-describedby="brief commit summary one liner" required />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="cmt-body">Detailed description</label>
+              <textarea rows="4" cols="100" class="form-control" id="cmt-body" placeholder="Introduce a request id and a reference to latest request. 
+  Dismissincoming responses other than from latest request. 
+  Remove timeouts which were used to mitigate the racing issue but are obsolete now."></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="cmt-body">Footer 1</label>
+              <div class="input-group mb-3" id="cmt-footer">
+                <input type="text" class="form-control" id="cmt-footer-name-1" placeholder="Jira-ref" >
+                <span class="input-group-text">: </span>
+                <input type="text" class="form-control footer-descr" id="cmt-footer-description-1" placeholder="#IN-12" >
+              </div>
+            </div>
+            <div class="col-4"></div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="cmt-body">Footer 2</label>
+              <div class="input-group mb-3" id="cmt-footer">
+                <input type="text" class="form-control" id="cmt-footer-name-2" placeholder="Revisioned-by" >
+                <span class="input-group-text">: </span>
+                <input type="text" class="form-control footer-descr" id="cmt-footer-description-2" placeholder="TL dr. xyz" >
+              </div>
+            </div>
+            <div class="col-4"></div>
+          </div>
+          <div class="row">
+            <div class="d-grid gap-6 mx-auto">
+              <button class="btn btn-dark" onclick="sendFormatReq()" type="button" data-bs-toggle="modal" data-bs-target="#cmt-modal">Format</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+<!-- Modal -->
+<div class="modal fade" id="cmt-modal" tabindex="-1" aria-labelledby="cmt-modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cmt-modalLabel">Formatted git commit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container result">
+          <textarea rows="4" cols="100" class="form-control" id="formatted-comment" placeholder="Copy and paste from here"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+
+      async function sendFormatReq(){
+        var myModal ="";
+        var form = document.getElementById('cmd-form');
+        if (form.checkValidity()) { 
+          const req = {
+              type: document.getElementById("cmt-type").value,
+              scope: document.getElementById("cmt-scope").value,
+              breaking_change_danger: document.getElementById("breaking_change_danger").checked?"!":"",
+              description: document.getElementById("cmt-description").value,
+              body: document.getElementById("cmt-body").value.split("\\n"),
+              footer: [{
+                  name: document.getElementById("cmt-footer-name-1").value,
+                  description: document.getElementById("cmt-footer-description-1").value
+              },
+              {
+                  name: document.getElementById("cmt-footer-name-2").value,
+                  description: document.getElementById("cmt-footer-description-2").value
+              }]
+          }
+              
+          let response = await fetch('http://localhost:8081/commit/format', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(req),
+          })
+          let text = await response.text(); 
+          document.querySelector("#formatted-comment").innerHTML = text;
+        } else {
+          document.querySelector("#formatted-comment").innerHTML = "ERROR: Please fill in all mandatory fields!";
+        }
+      }
+  </script>
+  </body>
+</html>

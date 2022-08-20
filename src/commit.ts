@@ -1,8 +1,5 @@
-interface Scope {
-  open: "(";
-  word: string;
-  close: ")";
-}
+import { Type } from "@sinclair/typebox";
+
 interface Footer {
   name: string;
   colon_space: ": ";
@@ -10,7 +7,7 @@ interface Footer {
 }
 export interface Commit {
   type: "fix" | "feat";
-  scope?: Scope;
+  scope?: string;
   breaking_change_danger?: "!";
   description: string;
   body?: string[];
@@ -23,11 +20,7 @@ const commitBasic: Commit = {
 };
 const commitWithScope: Commit = {
   type: "fix",
-  scope: {
-    open: "(",
-    word: "api",
-    close: ")",
-  },
+  scope: "(api)",
   description: "some simple fix has been performed",
 };
 const commitWithBang: Commit = {
@@ -49,4 +42,13 @@ export const samples = {
   commit_with_scope: commitWithScope,
   commit_with_warning: commitWithBang,
   commit_with_body: commitWithBody,
+};
+
+export const CommitFormatReq = {
+  type: Type.String(),
+  scope: Type.String(),
+  breaking_change_danger: Type.String(),
+  desctiprion: Type.String(),
+  body: Type.Array(Type.Object({})),
+  footer: Type.Array(Type.Object({})),
 };

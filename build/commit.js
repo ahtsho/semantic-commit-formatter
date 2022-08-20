@@ -1,17 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.samples = void 0;
+exports.CommitFormatReq = exports.samples = void 0;
+const typebox_1 = require("@sinclair/typebox");
 const commitBasic = {
     type: "fix",
     description: "some simple fix has been performed",
 };
 const commitWithScope = {
     type: "fix",
-    scope: {
-        open: "(",
-        word: "api",
-        close: ")",
-    },
+    scope: "(api)",
     description: "some simple fix has been performed",
 };
 const commitWithBang = {
@@ -33,4 +30,12 @@ exports.samples = {
     commit_with_scope: commitWithScope,
     commit_with_warning: commitWithBang,
     commit_with_body: commitWithBody,
+};
+exports.CommitFormatReq = {
+    type: typebox_1.Type.String(),
+    scope: typebox_1.Type.String(),
+    breaking_change_danger: typebox_1.Type.String(),
+    desctiprion: typebox_1.Type.String(),
+    body: typebox_1.Type.Array(typebox_1.Type.Object({})),
+    footer: typebox_1.Type.Array(typebox_1.Type.Object({})),
 };
