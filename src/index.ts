@@ -9,17 +9,20 @@ server.get("/commit/samples", async (request, reply) => {
 
 server.post("/commit/format", async (request, reply) => {
   const validComment: Commit = request.body as Commit;
-  const scope = validComment.scope ? `(${validComment.scope})` : "";
+  const scope = validComment.scope
+    ? `(${validComment.scope.replace(/ /g, "-")})`
+    : "";
 
   const body =
     validComment.body &&
     validComment.body.length &&
     validComment.body[0].length > 0
-      ? validComment.body.join("\n") + "\n\n"
+      ? validComment.body.join("\n") + "\n"
       : "";
   const footer =
     validComment.footer && validComment.footer.length > 0
-      ? validComment.footer
+      ? "\n" +
+        validComment.footer
           .filter((f) => {
             return f.name.length > 0 && f.description.length > 0;
           })

@@ -21,6 +21,10 @@
         border: solid 1px lightgray;
         min-height: 50px;
         padding: 15px;
+        margin:10px;
+      }
+      .form {
+        border: solid 2px black;
       }
       .form-check-input {
         width:2.5em;
@@ -31,19 +35,25 @@
       .footer-descr {
         width: 50% !important;
       }
+      .display-7 {
+        font-weight: 100;
+      }
+      .chat {
+        border: none;
+      }
     </style>
   </head>
   <body>
     <div class="supercontainer">
       <div class="container headers">
-        <h1>SEMITTER</h1>
-        <h3><em>the SEMantic gIt-commit formaTTER</em></h3>
+        <h1 class="display-5">SEMITTER</h1>
+        <h3 class="display-7 text-end"><em>the(semantic)!: git-commit formatter</em></h3>
       </div>
-      <div class="container fw-lighter">
-        <p>${user}:<em>"WHAT? You mean I can insert my git commit info here 
+      <div class="container chat fw-lighter">
+        <p> > usr:<em><< WHAT? You mean I can insert my git commit info here 
            and <b>SEMITTER</b> will give it back to <b>ctl-c + ctl-v </b> on my git repo?"<br></em></p> 
-        <p> >dev: <em>"Yep! <b>Conventional commits </b>are a low hanging fruit now! No more excuses, OK?"</em></p>
-        <p>${user}: <em>"Word!"</em></p>
+        <p> > dev: <em>"Yep! <b>Conventional Commits</b> are a low hanging fruit now! No more excuses, OK?"</em></p>
+        <p> > usr: <em>"Word!"</em></p>
       </div>
       <div class="container form">
         <form id="cmd-form">
@@ -52,7 +62,7 @@
               <label for="cmt-type" class="form-label">Choose type (*)</label>
               <select id="cmt-type" class="form-select" aria-label="Type">
                 <option value="fix">Bug Fix</option>
-                <option value="feat">Feture</option>
+                <option value="feat">Feature</option>
                 <option value="docs">Documentation</option>
                 <option value="style">Style</option>
                 <option value="refactor">Refactor</option>
@@ -61,15 +71,15 @@
               </select>
             </div>
             <div class="col">
-              <label for="cmt-scope" class="form-label"> Single word scope</label>
-              <input type="text" class="form-control" id="cmt-scope" aria-describedby="code-base-section">
+              <label for="cmt-scope" class="form-label"> Single-word-scope</label>
+              <input type="text" class="form-control" id="cmt-scope" placeholder="part-of-codebase">
             </div>
             <div class="col">
-              <label class="form-check-label" for="breaking_change_danger">Breaking commit?</label>
-              <input type="checkbox" class="form-check-input" id="breaking_change_danger">
+              <label class="form-check-label" for="breaking_change_danger">Breaking commit?!</label>
+              <input type="checkbox" class="form-check-input btn-outline-danger" id="breaking_change_danger">
             </div>
             :
-            <div class="col-6">
+            <div class="col-5">
               <label for="cmt-description" class="form-label">Short description of the commit (*) </label>
               <input type="text" class="form-control" id="cmt-description" aria-describedby="brief commit summary one liner" required />
             </div>
@@ -77,9 +87,9 @@
           <div class="row">
             <div class="col">
               <label for="cmt-body">Detailed description</label>
-              <textarea rows="4" cols="100" class="form-control" id="cmt-body" placeholder="Introduce a request id and a reference to latest request. 
-  Dismissincoming responses other than from latest request. 
-  Remove timeouts which were used to mitigate the racing issue but are obsolete now."></textarea>
+              <textarea rows="4" cols="100" class="form-control" id="cmt-body" placeholder="If you're in the mood, you can be more specific 
+and add as many lines of description as you want. 
+Hopefully, not more than the codebase!"></textarea>
             </div>
           </div>
           <div class="row">
@@ -122,12 +132,11 @@
       </div>
       <div class="modal-body">
         <div class="container result">
-          <textarea rows="4" cols="100" class="form-control" id="formatted-comment" placeholder="Copy and paste from here"></textarea>
+          <textarea rows="10" cols="100" class="form-control" id="formatted-comment" placeholder="Copy and paste from here"></textarea>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button id="cmt-copy" type="button" class="btn btn-dark" data-bs-dismiss="modal">Copy</button>
       </div>
     </div>
   </div>
@@ -169,6 +178,10 @@
         } else {
           document.querySelector("#formatted-comment").innerHTML = "ERROR: Please fill in all mandatory fields!";
         }
+      }
+      document.querySelector("#cmt-copy").onclick = function(){
+        document.querySelector("#formatted-comment").select();
+        document.execCommand('copy');
       }
   </script>
   </body>

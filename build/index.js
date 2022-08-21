@@ -21,21 +21,24 @@ server.get("/commit/samples", (request, reply) => __awaiter(void 0, void 0, void
 }));
 server.post("/commit/format", (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
     const validComment = request.body;
-    const scope = validComment.scope ? `(${validComment.scope})` : "";
+    const scope = validComment.scope
+        ? `(${validComment.scope.replace(/ /g, "-")})`
+        : "";
     const body = validComment.body &&
         validComment.body.length &&
         validComment.body[0].length > 0
-        ? validComment.body.join("\n") + "\n\n"
+        ? validComment.body.join("\n") + "\n"
         : "";
     const footer = validComment.footer && validComment.footer.length > 0
-        ? validComment.footer
-            .filter((f) => {
-            return f.name.length > 0 && f.description.length > 0;
-        })
-            .map((f) => {
-            return `${f.name.replace(/ /g, "-")}: ${f.description}`;
-        })
-            .join("\n")
+        ? "\n" +
+            validComment.footer
+                .filter((f) => {
+                return f.name.length > 0 && f.description.length > 0;
+            })
+                .map((f) => {
+                return `${f.name.replace(/ /g, "-")}: ${f.description}`;
+            })
+                .join("\n")
         : "";
     const formattedComment = `${validComment.type}${scope}${validComment.breaking_change_danger}:${validComment.description}\n` +
         `${body}` +
