@@ -27,7 +27,7 @@ server.post("/commit/format", (request, reply) => __awaiter(void 0, void 0, void
     const body = validComment.body &&
         validComment.body.length &&
         validComment.body[0].length > 0
-        ? validComment.body.join("\n") + "\n"
+        ? "\n" + validComment.body.join("\n") + "\n"
         : "";
     const footer = validComment.footer && validComment.footer.length > 0
         ? "\n" +
@@ -40,7 +40,7 @@ server.post("/commit/format", (request, reply) => __awaiter(void 0, void 0, void
             })
                 .join("\n")
         : "";
-    const formattedComment = `${validComment.type}${scope}${validComment.breaking_change_danger}:${validComment.description}\n` +
+    const formattedComment = `${validComment.type}${scope}${validComment.breaking_change_danger}: ${validComment.description}\n` +
         `${body}` +
         `${footer}`;
     reply.send(formattedComment);
